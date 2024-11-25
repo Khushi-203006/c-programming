@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/c proramming",
-      "program": "d:/c proramming/build/Debug/outDebug",
+      "cwd": "d:/Khushi/C-programming",
+      "program": "d:/Khushi/C-programming/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
