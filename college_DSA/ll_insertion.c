@@ -1,105 +1,123 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure
+// Define the structure for a node
 struct Node {
     int data;
     struct Node* next;
 };
 
-// Function to insert a new node at the beginning of the list
-void insertAtBeginning(struct Node** head, int newData) {
+// Function to create a new node
+struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = newData;
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the beginning
+void insertAtBeginning(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
     newNode->next = *head;
     *head = newNode;
 }
 
-// Function to insert a new node at the end of the list
-void insertAtEnd(struct Node** head, int newData) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = newData;
-    newNode->next = NULL;
-
+// Function to insert a node at the end
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
     if (*head == NULL) {
         *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+// Function to insert a node at a specific position
+void insertAtPosition(struct Node** head, int data, int position) {
+    if (position < 1) {
+        printf("Invalid position!\n");
+        return;
+    }
+    if (position == 1) {
+        insertAtBeginning(head, data);
+        return;
+    }
+    struct Node* newNode = createNode(data);
+    struct Node* temp = *head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+    if (temp == NULL) {
+        printf("Position out of bounds!\n");
+        free(newNode);
     } else {
-        struct Node* current = *head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
+        newNode->next = temp->next;
+        temp->next = newNode;
     }
 }
 
-// Function to insert a new node at a specific position in the list
-void insertAtPosition(struct Node** head, int newData, int position) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = newData;
-
-    if (position == 0) {
-        newNode->next = *head;
-        *head = newNode;
-    } else {
-        struct Node* current = *head;
-        for (int i = 0; i < position - 1; i++) {
-            current = current->next;
-        }
-        newNode->next = current->next;
-        current->next = newNode;
+// Function to display the linked list
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
     }
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
 }
 
-// Function to print the linked list
-void printList(struct Node* head) {
-    struct Node* current = head;
-    while (current != NULL) {
-        printf("%d ", current->data);
-        current = current->next;
-    }
-    printf("\n");
-}
-
+// Main function
 int main() {
     struct Node* head = NULL;
-    int n, data;
+    int choice, data, position;
 
-    // Input linked list from user
-    printf("Enter the number of nodes in the linked list: ");
-    scanf("%d", &n);
-    for (int i = 0; i < n; i++) {
-        printf("Enter data for node %d: ", i + 1);
-        scanf("%d", &data);
-        insertAtEnd(&head, data);
+        printf("\nMenu:\n");
+        printf("1. Insert at Beginning\n");
+        printf("2. Insert at End\n");
+        printf("3. Insert at Position\n");
+        printf("4. Display List\n");
+        printf("5. Exit\n");
+    while (1) {
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert at the beginning: ");
+                scanf("%d", &data);
+                insertAtBeginning(&head, data);
+                break;
+            case 2:
+                printf("Enter data to insert at the end: ");
+                scanf("%d", &data);
+                insertAtEnd(&head, data);
+                break;
+            case 3:
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                printf("Enter position to insert at: ");
+                scanf("%d", &position);
+                insertAtPosition(&head, data, position);
+                break;
+            case 4:
+                printf("Linked List: ");
+                displayList(head);
+                break;
+            case 5:
+                printf("Exiting...\n");
+                exit(0);
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
     }
-
-    // Print the original linked list
-    printf("Original linked list: ");
-    printList(head);
-
-    // Insert at beginning
-    printf("Enter data to insert at the beginning: ");
-    scanf("%d", &data);
-    insertAtBeginning(&head, data);
-    printf("Linked list after inserting at the beginning: ");
-    printList(head);
-
-    // Insert at end
-    printf("Enter data to insert at the end: ");
-    scanf("%d", &data);
-    insertAtEnd(&head, data);
-    printf("Linked list after inserting at the end: ");
-    printList(head);
-
-    // Insert at position
-    int position;
-    printf("Enter position to insert data: ");
-    scanf("%d", &position);
-    printf("Enter data to insert at position %d: ", position);
-    scanf("%d", &data);
-    insertAtPosition(&head, data, position);
-    printf("Linked list after inserting at position %d: ", position);
-    printList(head);
 
     return 0;
 }

@@ -4,18 +4,32 @@ void merge_array(int *arr, int low, int mid, int high){
     int left=low;
     int right=mid+1;
     int temp[high-low+1];
+    int k=0;
 
     while(left<=mid && right<=high){
-        for(int i=0;i<high;i++){
-            if(arr[left]<arr[right]){
-                temp[i]=arr[left];
-                left++;
-            }
-            else{
-                temp[i]=arr[right];
-                right++;
-            }
+        if(arr[left]<arr[right]){
+            temp[k]=arr[left];
+            k++;
+            left++;
         }
+        else{
+            temp[k]=arr[right];
+            k++;
+            right++;
+        }
+    }
+    while(left<=mid){
+            temp[k]=arr[left];
+            k++;
+            left++;
+    }
+    while(right<=high){
+            temp[k]=arr[right];
+            k++;
+            right++;
+    }
+    for(int i=0;i<k;i++){
+        arr[low+i]=temp[i];
     }
 
 }
@@ -41,6 +55,7 @@ int main(){
     for(int i=0;i<n;i++){
         printf("%d ",arr[i]);
     }
+    printf("\n");
     merge_sort(arr,0,n-1);
     for(int i=0;i<n;i++){
         printf("%d ",arr[i]);
